@@ -266,66 +266,63 @@ if (thumbs) {
   });
 }
 
-  // ===== PRODUTOS RELACIONADOS =====
-  const relacionadosBox =
-    document.getElementById("relacionados");
+  const relacionadosBox = document.getElementById("relacionados");
 
-  if (
-    relacionadosBox &&
-    Array.isArray(window.produtos)
-  ) {
+if (relacionadosBox && Array.isArray(window.produtos)) {
+  const categoriaAtual = String(p.categoria || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
-    const relacionados =
-      window.produtos
-      .filter(item =>
+  let relacionados = window.produtos
+    .filter(item => {
+      if (!item) return false;
 
-        item.categoria === p.categoria &&
+      const mesmoProduto = String(item.id) === String(p.id);
 
-        Number(item.id) !== Number(p.id)
+      const categoriaItem = String(item.categoria || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
 
-      )
-      .slice(0, 4);
+      return !mesmoProduto && categoriaItem === categoriaAtual;
+    })
+    .slice(0, 8);
 
-    relacionadosBox.innerHTML = "";
-
-    relacionados.forEach(item => {
-
-      const img =
-      item.images?.[0] ||
-      "img/placeholder.jpg";
-
-      const link =
-      typeof gerarLinkProduto ===
-      "function"
-
-      ? gerarLinkProduto(item)
-
-      : `produto.html?id=${item.id}`;
-
-      relacionadosBox.innerHTML += `
-
-      <a href="${link}" class="pdp-rel-inner">
-
-      <img
-      src="${img}"
-      alt="${item.nome}">
-
-      <h4>
-      ${item.nome}
-      </h4>
-
-      <p>
-      ${money(item.preco)}
-      </p>
-
-      </a>
-
-      `;
-
-    });
-
+  // Se não encontrar pela categoria, mostra outros produtos da loja
+  if (relacionados.length === 0) {
+    relacionados = window.produtos
+      .filter(item => String(item.id) !== String(p.id))
+      .slice(0, 8);
   }
 
+  relacionadosBox.innerHTML = "";
+
+  relacionados.forEach(item => {
+    const img =
+      item.images?.[0] ||
+      item.imagem ||
+      item.image ||
+      "img/placeholder.jpg";
+
+    const link =
+      typeof gerarLinkProduto === "function"
+        ? gerarLinkProduto(item)
+        : `produto.html?id=${item.id}`;
+
+    relacionadosBox.innerHTML += `
+      <a href="${link}" class="pdp-rel-inner">
+        <img src="${img}" alt="${item.nome}">
+
+        <h4>${item.nome}</h4>
+
+        <p>${money(item.preco)}</p>
+      </a>
+    `;
+  });
+}
   // garante que meta fica escondido mesmo se o HTML renderizar depois
   hideLoadingAndMeta();
 
@@ -407,7 +404,7 @@ function mostrarToastCarrinho() {
   const toast = document.getElementById("toastCarrinho");
 
   if (!toast) {
-    alert("Produto adicionado ao carrinho!");
+    mostrarToastCarrinho();
     return;
   }
 
