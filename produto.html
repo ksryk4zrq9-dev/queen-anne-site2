@@ -63,6 +63,18 @@
 
 <body class="pagina-produto">
   <div id="header"></div>
+  <div id="toastCarrinho" class="toast-carrinho">
+  <div class="toast-carrinho-icon">
+    <i class="fa-solid fa-check"></i>
+  </div>
+
+  <div class="toast-carrinho-texto">
+    <strong>Produto adicionado!</strong>
+    <span>O item foi colocado no seu carrinho.</span>
+  </div>
+
+  <a href="carrinho.html">Ver carrinho</a>
+</div>
 
   <main class="pdp">
  <section class="pdp-hero pdp-clean-hero">
@@ -248,8 +260,10 @@
   <!-- SCRIPTS -->
 
 
-<script src="supabase-api.js"></script>
+
 <script src="produto.js"></script>
+<script src="script.js"></script>
+<script src="produto-premium.js"></script>
 
 <script>
  function atualizarContadorCarrinho() {
