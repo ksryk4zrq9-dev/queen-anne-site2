@@ -352,60 +352,7 @@ function carregarProdutosParaVoce() {
   setTimeout(atualizarSetas, 100);
 }
 
-/* =====================================================
-   PRODUTOS PARA VOCÊ — PRODUTOS VISUALIZADOS
-===================================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(carregarProdutosParaVoce, 500);
-});
-
-function carregarProdutosParaVoce() {
-  const container = document.getElementById("produtosParaVoce");
-
-  if (!container) return;
-
-  const vistos = JSON.parse(localStorage.getItem("qa_produtos_vistos")) || [];
-
-  container.innerHTML = "";
-
-  if (vistos.length === 0) {
-    container.innerHTML = `
-      <div class="produtos-para-voce-vazio">
-        <h3>Nenhum produto visto ainda</h3>
-        <p>Ao visualizar produtos, eles aparecerão aqui para você encontrar de novo com facilidade.</p>
-      </div>
-    `;
-    return;
-  }
-
-  vistos.forEach(produto => {
-    const preco = Number(produto.preco || 0).toFixed(2);
-
-    const link = produto.url || `produto.html?id=${produto.id}`;
-
-    const imagem =
-      produto.imagem ||
-      produto.image ||
-      "img/placeholder.jpg";
-
-    container.innerHTML += `
-      <div class="produto-card">
-        <a href="${link}">
-          <img src="${imagem}" alt="${produto.nome}">
-        </a>
-
-        <h3>${produto.nome}</h3>
-
-        <p class="preco">U$ ${preco}</p>
-
-        <a href="${link}" class="btn-ver">
-          Ver produto
-        </a>
-      </div>
-    `;
-  });
-}
+carregarProdutosParaVoce();
 
 montarSlider();
 });
@@ -416,3 +363,4 @@ window.addEventListener("load", () => {
     linha.style.animation = "";
   });
 });
+
